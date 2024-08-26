@@ -35,6 +35,7 @@ public class RSLoadDataServiceImpl implements RSLoadDataService {
         try {
             for (RSLoadDataDTO dto : data) {
                 RSLoadData entity = convertToEntity(dto);
+                entity.setFlags("N");
                 rsLoadDataRepository.save(entity);
             }
             log.info("Data uploaded successfully.");
@@ -55,7 +56,9 @@ public class RSLoadDataServiceImpl implements RSLoadDataService {
 
     @Override
     public ResponseEntity<Resource> getXMLData() {
-        List<RSLoadData> data = getAllData();
+        List<RSLoadData> data = rsLoadDataRepository.findByFlags("N");
+
+        // List<RSLoadData> data = getAllData();
         if (data == null || data.isEmpty()) {
             log.warn("No data available to generate XML.");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -66,6 +69,12 @@ public class RSLoadDataServiceImpl implements RSLoadDataService {
             log.error("Failed to convert data to XML.");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        // Update the flag to 'Y' after generating XML
+        data.forEach(entity -> {
+            entity.setFlags("Y");
+            rsLoadDataRepository.save(entity);
+        });
 
         ByteArrayResource resource = new ByteArrayResource(xmlData.getBytes());
 
@@ -231,7 +240,17 @@ public class RSLoadDataServiceImpl implements RSLoadDataService {
         entity.setMontantTTC(dto.getMontantTTC());
         entity.setMontantRS(dto.getMontantRS());
         entity.setMontantNetServi(dto.getMontantNetServi());
-
+        entity.setMontantTotalHT(dto.getMontantTotalHT());
+        entity.setMontantTotalTVA(dto.getMontantTotalTVA());
+        entity.setMontantTotalTTC(dto.getMontantTotalTTC());
+        entity.setMontantTotalRS(dto.getMontantTotalRS());
+        entity.setTaxeAddCode(dto.getTaxeAddCode());
+        entity.setTaxeAddMontant(dto.getTaxeAddMontant());
+        entity.setMonNetServi(dto.getMonNetServi());
+        entity.setDeviseCode(dto.getDeviseCode());
+        entity.setDeviseTotalRS(dto.getDeviseTotalRS());
+        entity.setDeviseTotalTTC(dto.getDeviseTotalTTC());
+        entity.setDeviseTotalNetServi(dto.getDeviseTotalNetServi());
         return entity;
     }
 }

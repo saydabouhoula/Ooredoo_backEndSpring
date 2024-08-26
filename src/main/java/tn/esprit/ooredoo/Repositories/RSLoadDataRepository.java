@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface RSLoadDataRepository extends JpaRepository<RSLoadData, Long> {
     List<RSLoadData> findByIdDeclarant(String idDeclarant);
+
+    List<RSLoadData> findByFlags(String flag);
+
 }
