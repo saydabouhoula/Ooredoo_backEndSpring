@@ -1,4 +1,6 @@
 package tn.esprit.ooredoo.xml;
+
+import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -6,6 +8,9 @@ import java.math.BigDecimal;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Operation {
+
+    @XmlAttribute(name = "IdTypeOperation")
+    private String idTypeOperation;
 
     @XmlElement(name = "AnneeFacturation")
     private BigDecimal anneeFacturation;
@@ -37,7 +42,15 @@ public class Operation {
     @XmlElement(name = "MontantNetServi")
     private BigDecimal montantNetServi;
 
-    // Getter and Setter methods
+    // Getters and Setters
+    public String getIdTypeOperation() {
+        return idTypeOperation;
+    }
+
+    public void setIdTypeOperation(String idTypeOperation) {
+        this.idTypeOperation = idTypeOperation;
+    }
+
     public BigDecimal getAnneeFacturation() {
         return anneeFacturation;
     }

@@ -65,8 +65,8 @@ public class OoredooApplication {
         String anneeFacturation = decimalFormat.format(operation.getAnneeFacturation());
         String montantHT = decimalFormat.format(operation.getMontantHT());
 
-        operationXML.setType(anneeFacturation); // Assurez-vous que 'Type' est un String dans OperationXML
-        operationXML.setMontant(montantHT); // Assurez-vous que 'Montant' est un String dans OperationXML
+//        operationXML.setType(anneeFacturation); // Assurez-vous que 'Type' est un String dans OperationXML
+//        operationXML.setMontant(montantHT); // Assurez-vous que 'Montant' est un String dans OperationXML
 
         // Ajoutez d'autres propriétés si nécessaire
 

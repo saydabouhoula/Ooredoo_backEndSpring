@@ -20,6 +20,10 @@
         String generateXML(Certificat certificat);
 
 
-        List<Operation> getOperationsForCertificat(String idDeclarant);
+       // List<Operation> getOperationsForCertificat(String idDeclarant);
+
+       // public List<RSLoadData> getOperationsByCertificat(String idOperation);
+
+        List<Operation> getOperationsByCertificat(String idOperation);
 
     }

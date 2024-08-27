@@ -10,4 +10,7 @@ public interface RSLoadDataRepository extends JpaRepository<RSLoadData, Long> {
 
     List<RSLoadData> findByFlags(String flag);
 
+
+    // Nouvelle méthode pour récupérer les opérations par idOperation
+    List<RSLoadData> findByIdOperation(String idOperation);
 }

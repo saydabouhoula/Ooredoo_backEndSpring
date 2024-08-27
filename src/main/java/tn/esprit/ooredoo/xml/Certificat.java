@@ -3,18 +3,20 @@ package tn.esprit.ooredoo.xml;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import tn.esprit.ooredoo.adapter.LocalDateAdapter;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 @XmlRootElement(name = "Certificat")
 @XmlType(propOrder = { "beneficiaire", "datePayement", "refCertifChezDeclarant", "listeOperations", "totalPayement", "idTaxpayer", "infosContact" })
 public class Certificat {
 
     private Beneficiaire beneficiaire;
-    private LocalDate datePayement; // Use LocalDate for date fields
+    private LocalDate datePayement;
     private String refCertifChezDeclarant;
-    private List<OperationXML> listeOperations = new ArrayList<>();
+    private ListeOperations listeOperations = new ListeOperations(); // Initialize to avoid null
     private TotalPayement totalPayement;
     private IdTaxpayer idTaxpayer;
     private InfosContact infosContact;
@@ -29,6 +31,7 @@ public class Certificat {
     }
 
     @XmlElement(name = "DatePayement")
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)  // Utilisation de l'adaptateur
     public LocalDate getDatePayement() {
         return datePayement;
     }
@@ -47,11 +50,11 @@ public class Certificat {
     }
 
     @XmlElement(name = "ListeOperations")
-    public List<OperationXML> getListeOperations() {
+    public ListeOperations getListeOperations() {
         return listeOperations;
     }
 
-    public void setListeOperations(List<OperationXML> listeOperations) {
+    public void setListeOperations(ListeOperations listeOperations) {
         this.listeOperations = listeOperations;
     }
 
@@ -82,11 +85,7 @@ public class Certificat {
         this.infosContact = infosContact;
     }
 
-    // Method to add an OperationXML to the list
     public void addOperation(OperationXML operation) {
-        if (this.listeOperations == null) {
-            this.listeOperations = new ArrayList<>();
-        }
-        this.listeOperations.add(operation);
+        this.listeOperations.addOperation(operation);
     }
 }

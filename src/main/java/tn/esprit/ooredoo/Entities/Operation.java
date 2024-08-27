@@ -1,16 +1,12 @@
-package tn.esprit.ooredoo.xml;
+package tn.esprit.ooredoo.Entities;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlType;
 import java.math.BigDecimal;
 
-@XmlType(propOrder = {
-        "idTypeOperation", "anneeFacturation", "cNPC", "pCharge",
-        "montantHT", "tauxRS", "tauxTVA", "montantTVA",
-        "montantTTC", "montantRS", "montantNetServi"
-})
-public class OperationXML {
-
+@Data
+public class Operation {
     private String idTypeOperation;
     private BigDecimal anneeFacturation;
     private BigDecimal cNPC;
@@ -23,7 +19,28 @@ public class OperationXML {
     private BigDecimal montantRS;
     private BigDecimal montantNetServi;
 
-    @XmlElement(name = "IdTypeOperation")
+    // Constructeur par défaut
+    public Operation() {
+    }
+
+    // Constructeur avec tous les paramètres
+    public Operation(String idTypeOperation, BigDecimal anneeFacturation, BigDecimal cNPC, BigDecimal pCharge,
+                     BigDecimal montantHT, BigDecimal tauxRS, BigDecimal tauxTVA, BigDecimal montantTVA,
+                     BigDecimal montantTTC, BigDecimal montantRS, BigDecimal montantNetServi) {
+        this.idTypeOperation = idTypeOperation;
+        this.anneeFacturation = anneeFacturation;
+        this.cNPC = cNPC;
+        this.pCharge = pCharge;
+        this.montantHT = montantHT;
+        this.tauxRS = tauxRS;
+        this.tauxTVA = tauxTVA;
+        this.montantTVA = montantTVA;
+        this.montantTTC = montantTTC;
+        this.montantRS = montantRS;
+        this.montantNetServi = montantNetServi;
+    }
+
+    // Getters et setters
     public String getIdTypeOperation() {
         return idTypeOperation;
     }
@@ -32,7 +49,6 @@ public class OperationXML {
         this.idTypeOperation = idTypeOperation;
     }
 
-    @XmlElement(name = "AnneeFacturation")
     public BigDecimal getAnneeFacturation() {
         return anneeFacturation;
     }
@@ -41,7 +57,6 @@ public class OperationXML {
         this.anneeFacturation = anneeFacturation;
     }
 
-    @XmlElement(name = "CNPC") // Correct name to match propOrder
     public BigDecimal getcNPC() {
         return cNPC;
     }
@@ -50,7 +65,6 @@ public class OperationXML {
         this.cNPC = cNPC;
     }
 
-    @XmlElement(name = "PCharge") // Correct name to match propOrder
     public BigDecimal getpCharge() {
         return pCharge;
     }
@@ -59,7 +73,6 @@ public class OperationXML {
         this.pCharge = pCharge;
     }
 
-    @XmlElement(name = "MontantHT")
     public BigDecimal getMontantHT() {
         return montantHT;
     }
@@ -68,7 +81,6 @@ public class OperationXML {
         this.montantHT = montantHT;
     }
 
-    @XmlElement(name = "TauxRS")
     public BigDecimal getTauxRS() {
         return tauxRS;
     }
@@ -77,7 +89,6 @@ public class OperationXML {
         this.tauxRS = tauxRS;
     }
 
-    @XmlElement(name = "TauxTVA")
     public BigDecimal getTauxTVA() {
         return tauxTVA;
     }
@@ -86,7 +97,6 @@ public class OperationXML {
         this.tauxTVA = tauxTVA;
     }
 
-    @XmlElement(name = "MontantTVA")
     public BigDecimal getMontantTVA() {
         return montantTVA;
     }
@@ -95,7 +105,6 @@ public class OperationXML {
         this.montantTVA = montantTVA;
     }
 
-    @XmlElement(name = "MontantTTC")
     public BigDecimal getMontantTTC() {
         return montantTTC;
     }
@@ -104,7 +113,6 @@ public class OperationXML {
         this.montantTTC = montantTTC;
     }
 
-    @XmlElement(name = "MontantRS")
     public BigDecimal getMontantRS() {
         return montantRS;
     }
@@ -113,7 +121,6 @@ public class OperationXML {
         this.montantRS = montantRS;
     }
 
-    @XmlElement(name = "MontantNetServi")
     public BigDecimal getMontantNetServi() {
         return montantNetServi;
     }
@@ -121,4 +128,22 @@ public class OperationXML {
     public void setMontantNetServi(BigDecimal montantNetServi) {
         this.montantNetServi = montantNetServi;
     }
+
+    @Override
+    public String toString() {
+        return "Operation{" +
+                "idTypeOperation='" + idTypeOperation + '\'' +
+                ", anneeFacturation=" + anneeFacturation +
+                ", cNPC=" + cNPC +
+                ", pCharge=" + pCharge +
+                ", montantHT=" + montantHT +
+                ", tauxRS=" + tauxRS +
+                ", tauxTVA=" + tauxTVA +
+                ", montantTVA=" + montantTVA +
+                ", montantTTC=" + montantTTC +
+                ", montantRS=" + montantRS +
+                ", montantNetServi=" + montantNetServi +
+                '}';
+    }
 }
+
