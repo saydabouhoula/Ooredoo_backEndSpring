@@ -265,7 +265,7 @@ public class RSLoadDataServiceImpl implements RSLoadDataService {
             totalPayement.setTotalMontantTVA(entity.getMontantTotalTVA());
             totalPayement.setTotalMontantTTC(entity.getMontantTotalTTC());
             totalPayement.setTotalMontantRS(entity.getMontantTotalRS());
-            totalPayement.setTotalMontantNetServi(entity.getMontantNetServi());
+            totalPayement.setTotalMontantNetServi(entity.getMonNetServi());
             certificat.setTotalPayement(totalPayement);
 
             ajouterCertificats.addCertificat(certificat);
@@ -372,6 +372,8 @@ public class RSLoadDataServiceImpl implements RSLoadDataService {
         entity.setDeviseTotalRS(dto.getDeviseTotalRS());
         entity.setDeviseTotalTTC(dto.getDeviseTotalTTC());
         entity.setDeviseTotalNetServi(dto.getDeviseTotalNetServi());
+        entity.setTotalTaxeAddCode(dto.getTotalTaxeAddCode());
+        entity.setTotalTaxeAddMontant(dto.getTotalTaxeAddMontant());
         return entity;
     }
 }

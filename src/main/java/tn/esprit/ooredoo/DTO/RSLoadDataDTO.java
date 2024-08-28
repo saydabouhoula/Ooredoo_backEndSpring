@@ -71,9 +71,10 @@ public class RSLoadDataDTO {
     private BigDecimal deviseTotalRS;
     private BigDecimal deviseTotalTTC;
     private BigDecimal deviseTotalNetServi;
+    private BigDecimal totalTaxeAddCode;
+    private BigDecimal totalTaxeAddMontant;
     private String flags;
 
-    // Getters and Setters
 
     public BigDecimal getTypeIdDeclarant() {
         return typeIdDeclarant;
@@ -502,7 +503,7 @@ public class RSLoadDataDTO {
     public String getDeviseCode() {
         return deviseCode;
     }
-
+    
     public void setDeviseCode(String deviseCode) {
         this.deviseCode = deviseCode;
     }
@@ -529,6 +530,22 @@ public class RSLoadDataDTO {
 
     public void setDeviseTotalNetServi(BigDecimal deviseTotalNetServi) {
         this.deviseTotalNetServi = deviseTotalNetServi;
+    }
+
+    public BigDecimal getTotalTaxeAddCode() {
+        return totalTaxeAddCode;
+    }
+
+    public void setTotalTaxeAddCode(BigDecimal totalTaxeAddCode) {
+        this.totalTaxeAddCode = totalTaxeAddCode;
+    }
+
+    public BigDecimal getTotalTaxeAddMontant() {
+        return totalTaxeAddMontant;
+    }
+
+    public void setTotalTaxeAddMontant(BigDecimal totalTaxeAddMontant) {
+        this.totalTaxeAddMontant = totalTaxeAddMontant;
     }
 
     public String getFlags() {

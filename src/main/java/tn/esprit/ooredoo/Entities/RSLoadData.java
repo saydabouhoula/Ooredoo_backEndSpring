@@ -180,7 +180,7 @@ public class RSLoadData {
     @Column(name = "TAXEADDMONTANT", precision = 15, scale = 4)
     private BigDecimal taxeAddMontant;
 
-    @Column(name = "MONNETSERVI", precision = 15, scale = 4)
+    @Column(name = "MONTOTALNETSERVI", precision = 15, scale = 4)
     private BigDecimal monNetServi;
 
     @Column(name = "DEVISECODE")
@@ -194,6 +194,13 @@ public class RSLoadData {
 
     @Column(name = "DEVISETOTALNETSERVI", precision = 15, scale = 4)
     private BigDecimal deviseTotalNetServi;
+
+
+    @Column(name = "TOTALTAXEADDCODE", precision = 15, scale = 4)
+    private BigDecimal totalTaxeAddCode;
+
+    @Column(name = "TOTALTAXEADDMONTANT", precision = 15, scale = 4)
+    private BigDecimal totalTaxeAddMontant;
 
     @Column(name = "FLAGS")
     private String flags;
