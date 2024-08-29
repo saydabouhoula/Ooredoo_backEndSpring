@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -183,7 +184,100 @@ public class RSLoadDataServiceImpl implements RSLoadDataService {
 //    }
 
 
-    private String convertToXML(List<RSLoadData> data) {
+//    private String convertToXML(List<RSLoadData> data) {
+//        if (data == null || data.isEmpty()) {
+//            log.warn("Data list is empty while converting to XML.");
+//            return null;
+//        }
+//
+//        DeclarationsRS declarationsRS = new DeclarationsRS();
+//        declarationsRS.setVersionSchema("1.0");
+//
+//        Declarant declarant = new Declarant();
+//        declarant.setTypeIdentifiant("1");
+//        declarant.setIdentifiant("0789012H");
+//        declarant.setCategorieContribuable("PM");
+//        declarationsRS.setDeclarant(declarant);
+//
+//        ReferenceDeclaration referenceDeclaration = new ReferenceDeclaration();
+//        referenceDeclaration.setActeDepot(0);
+//        referenceDeclaration.setAnneeDepot(2024);
+//        referenceDeclaration.setMoisDepot(6);
+//        declarationsRS.setReferenceDeclaration(referenceDeclaration);
+//
+//        AjouterCertificats ajouterCertificats = new AjouterCertificats();
+//
+//        for (RSLoadData entity : data) {
+//            Certificat certificat = new Certificat();
+//
+//            Beneficiaire beneficiaire = new Beneficiaire();
+//            IdTaxpayer idTaxpayer = new IdTaxpayer();
+//            MatriculeFiscal matriculeFiscal = new MatriculeFiscal();
+//            matriculeFiscal.setTypeIdentifiant(entity.getTypeIdDeclarant().toString());
+//            matriculeFiscal.setIdentifiant(entity.getIdDeclarant());
+//            matriculeFiscal.setCategorieContribuable(entity.getCatDeclarant());
+//            idTaxpayer.setMatriculeFiscal(matriculeFiscal);
+//            beneficiaire.setIdTaxpayer(idTaxpayer);
+//            beneficiaire.setResident(entity.getResident());
+//            beneficiaire.setNomEtPrenomOuRaisonsociale(entity.getNomOuRs());
+//            beneficiaire.setAdresse(entity.getAdresseBenif());
+//            beneficiaire.setActivite(entity.getActivite());
+//
+//            InfosContact infosContact = new InfosContact();
+//            infosContact.setAdresseMail(entity.getAdresseMail());
+//            infosContact.setNumTel(entity.getNumTel());
+//            beneficiaire.setInfosContact(infosContact);
+//
+//            certificat.setBeneficiaire(beneficiaire);
+//            certificat.setDatePayement(entity.getDatePaiement());
+//            certificat.setRefCertifChezDeclarant(entity.getRefCertifDecl());
+//
+//            // Récupérer les opérations sous forme de List<Operation>
+//            List<Operation> operationsData = getOperationsByCertificat(entity.getIdOperation());
+//
+//            // Convertir les opérations en List<OperationXML>
+//            ListeOperations listeOperations = new ListeOperations();
+//            List<OperationXML> operations = new ArrayList<>();
+//            if (operationsData != null) {
+//                for (Operation operation : operationsData) {
+//                    OperationXML operationXML = new OperationXML();
+//                    operationXML.setIdTypeOperation(operation.getIdTypeOperation());
+//                    operationXML.setAnneeFacturation(operation.getAnneeFacturation());
+//                    operationXML.setcNPC(operation.getcNPC());
+//                    operationXML.setpCharge(operation.getpCharge());
+//                    operationXML.setMontantHT(operation.getMontantHT());
+//                    operationXML.setTauxRS(operation.getTauxRS());
+//                    operationXML.setTauxTVA(operation.getTauxTVA());
+//                    operationXML.setMontantTVA(operation.getMontantTVA());
+//                    operationXML.setMontantTTC(operation.getMontantTTC());
+//                    operationXML.setMontantRS(operation.getMontantRS());
+//                    operationXML.setMontantNetServi(operation.getMontantNetServi());
+//                    operations.add(operationXML);
+//                }
+//            }
+//            listeOperations.setOperations(operations);
+//           // certificat.setListeOperations(listeOperations.getOperations());
+//
+//            // Assignez l'objet ListeOperations au certificat
+//            certificat.setListeOperations(listeOperations);
+//
+//            TotalPayement totalPayement = new TotalPayement();
+//            totalPayement.setTotalMontantHT(entity.getMontantTotalHT());
+//            totalPayement.setTotalMontantTVA(entity.getMontantTotalTVA());
+//            totalPayement.setTotalMontantTTC(entity.getMontantTotalTTC());
+//            totalPayement.setTotalMontantRS(entity.getMontantTotalRS());
+//            totalPayement.setTotalMontantNetServi(entity.getMonNetServi());
+//            certificat.setTotalPayement(totalPayement);
+//
+//            ajouterCertificats.addCertificat(certificat);
+//        }
+//
+//        declarationsRS.setAjouterCertificats(ajouterCertificats);
+//
+//        return XMLUtil.convertToXML(declarationsRS);
+//    }
+
+    public String convertToXML(List<RSLoadData> data) {
         if (data == null || data.isEmpty()) {
             log.warn("Data list is empty while converting to XML.");
             return null;
@@ -206,66 +300,82 @@ public class RSLoadDataServiceImpl implements RSLoadDataService {
 
         AjouterCertificats ajouterCertificats = new AjouterCertificats();
 
-        for (RSLoadData entity : data) {
+        Map<String, List<RSLoadData>> groupedData = data.stream()
+                .collect(Collectors.groupingBy(RSLoadData::getRefCertifDecl));
+
+        for (Map.Entry<String, List<RSLoadData>> entry : groupedData.entrySet()) {
+            String certificatId = entry.getKey();
+            List<RSLoadData> group = entry.getValue();
+
+            if (group.isEmpty()) continue;
+
             Certificat certificat = new Certificat();
+
+            RSLoadData firstEntity = group.get(0);
 
             Beneficiaire beneficiaire = new Beneficiaire();
             IdTaxpayer idTaxpayer = new IdTaxpayer();
             MatriculeFiscal matriculeFiscal = new MatriculeFiscal();
-            matriculeFiscal.setTypeIdentifiant(entity.getTypeIdDeclarant().toString());
-            matriculeFiscal.setIdentifiant(entity.getIdDeclarant());
-            matriculeFiscal.setCategorieContribuable(entity.getCatDeclarant());
+            matriculeFiscal.setTypeIdentifiant(firstEntity.getTypeIdDeclarant().toString());
+            matriculeFiscal.setIdentifiant(firstEntity.getIdDeclarant());
+            matriculeFiscal.setCategorieContribuable(firstEntity.getCatDeclarant());
             idTaxpayer.setMatriculeFiscal(matriculeFiscal);
             beneficiaire.setIdTaxpayer(idTaxpayer);
-            beneficiaire.setResident(entity.getResident());
-            beneficiaire.setNomEtPrenomOuRaisonsociale(entity.getNomOuRs());
-            beneficiaire.setAdresse(entity.getAdresseBenif());
-            beneficiaire.setActivite(entity.getActivite());
+            beneficiaire.setResident(firstEntity.getResident());
+            beneficiaire.setNomEtPrenomOuRaisonsociale(firstEntity.getNomOuRs());
+            beneficiaire.setAdresse(firstEntity.getAdresseBenif());
+            beneficiaire.setActivite(firstEntity.getActivite());
 
             InfosContact infosContact = new InfosContact();
-            infosContact.setAdresseMail(entity.getAdresseMail());
-            infosContact.setNumTel(entity.getNumTel());
+            infosContact.setAdresseMail(firstEntity.getAdresseMail());
+            infosContact.setNumTel(firstEntity.getNumTel());
             beneficiaire.setInfosContact(infosContact);
 
             certificat.setBeneficiaire(beneficiaire);
-            certificat.setDatePayement(entity.getDatePaiement());
-            certificat.setRefCertifChezDeclarant(entity.getRefCertifDecl());
+            certificat.setDatePayement(firstEntity.getDatePaiement());
+            certificat.setRefCertifChezDeclarant(certificatId);
 
-            // Récupérer les opérations sous forme de List<Operation>
-            List<Operation> operationsData = getOperationsByCertificat(entity.getIdOperation());
-
-            // Convertir les opérations en List<OperationXML>
             ListeOperations listeOperations = new ListeOperations();
             List<OperationXML> operations = new ArrayList<>();
-            if (operationsData != null) {
-                for (Operation operation : operationsData) {
+            for (RSLoadData entity : group) {
+                if (entity.getIdOperation() != null &&
+                        entity.getAnneeFacture() != null &&
+                        entity.getCNPC() != null &&
+                        entity.getPriseEnCharge() != null &&
+                        entity.getMontantHT() != null &&
+                        entity.getTauxRS() != null &&
+                        entity.getTauxTVA() != null &&
+                        entity.getMontantTVA() != null &&
+                        entity.getMontantTTC() != null &&
+                        entity.getMontantRS() != null &&
+                        entity.getMontantNetServi() != null) {
+    
                     OperationXML operationXML = new OperationXML();
-                    operationXML.setIdTypeOperation(operation.getIdTypeOperation());
-                    operationXML.setAnneeFacturation(operation.getAnneeFacturation());
-                    operationXML.setcNPC(operation.getcNPC());
-                    operationXML.setpCharge(operation.getpCharge());
-                    operationXML.setMontantHT(operation.getMontantHT());
-                    operationXML.setTauxRS(operation.getTauxRS());
-                    operationXML.setTauxTVA(operation.getTauxTVA());
-                    operationXML.setMontantTVA(operation.getMontantTVA());
-                    operationXML.setMontantTTC(operation.getMontantTTC());
-                    operationXML.setMontantRS(operation.getMontantRS());
-                    operationXML.setMontantNetServi(operation.getMontantNetServi());
+                    operationXML.setIdTypeOperation(entity.getIdOperation());
+                    operationXML.setAnneeFacturation(entity.getAnneeFacture());
+                    operationXML.setcNPC(entity.getCNPC());
+                    operationXML.setpCharge(entity.getPriseEnCharge());
+                    operationXML.setMontantHT(entity.getMontantHT());
+                    operationXML.setTauxRS(entity.getTauxRS());
+                    operationXML.setTauxTVA(entity.getTauxTVA());
+                    operationXML.setMontantTVA(entity.getMontantTVA());
+                    operationXML.setMontantTTC(entity.getMontantTTC());
+                    operationXML.setMontantRS(entity.getMontantRS());
+                    operationXML.setMontantNetServi(entity.getMontantNetServi());
+
                     operations.add(operationXML);
                 }
             }
             listeOperations.setOperations(operations);
-           // certificat.setListeOperations(listeOperations.getOperations());
 
-            // Assignez l'objet ListeOperations au certificat
             certificat.setListeOperations(listeOperations);
 
             TotalPayement totalPayement = new TotalPayement();
-            totalPayement.setTotalMontantHT(entity.getMontantTotalHT());
-            totalPayement.setTotalMontantTVA(entity.getMontantTotalTVA());
-            totalPayement.setTotalMontantTTC(entity.getMontantTotalTTC());
-            totalPayement.setTotalMontantRS(entity.getMontantTotalRS());
-            totalPayement.setTotalMontantNetServi(entity.getMonNetServi());
+            totalPayement.setTotalMontantHT(firstEntity.getMontantTotalHT());
+            totalPayement.setTotalMontantTVA(firstEntity.getMontantTotalTVA());
+            totalPayement.setTotalMontantTTC(firstEntity.getMontantTotalTTC());
+            totalPayement.setTotalMontantRS(firstEntity.getMontantTotalRS());
+            totalPayement.setTotalMontantNetServi(firstEntity.getMonNetServi());
             certificat.setTotalPayement(totalPayement);
 
             ajouterCertificats.addCertificat(certificat);

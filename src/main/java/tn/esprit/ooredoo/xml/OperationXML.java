@@ -1,5 +1,6 @@
 package tn.esprit.ooredoo.xml;
 
+import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 import java.math.BigDecimal;
@@ -23,7 +24,7 @@ public class OperationXML {
     private BigDecimal montantRS;
     private BigDecimal montantNetServi;
 
-    @XmlElement(name = "IdTypeOperation")
+    @XmlAttribute(name = "IdTypeOperation")
     public String getIdTypeOperation() {
         return idTypeOperation;
     }
@@ -41,7 +42,7 @@ public class OperationXML {
         this.anneeFacturation = anneeFacturation;
     }
 
-    @XmlElement(name = "CNPC") // Correct name to match propOrder
+    @XmlElement(name = "CNPC")
     public BigDecimal getcNPC() {
         return cNPC;
     }
@@ -50,7 +51,7 @@ public class OperationXML {
         this.cNPC = cNPC;
     }
 
-    @XmlElement(name = "PCharge") // Correct name to match propOrder
+    @XmlElement(name = "PCharge")
     public BigDecimal getpCharge() {
         return pCharge;
     }
